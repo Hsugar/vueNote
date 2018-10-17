@@ -1,0 +1,52 @@
+<!-- 1. el-pagination: -->
+
+
+<el-pagination :page-size="15*1" @size-change="handleSizeChange" @current-change="handleCurrentChange" layout="total, prev, pager, next, jumper"
+    :total="totalCount">
+</el-pagination>
+
+<!-- :page-size="15*1" 加上冒号会当成表达式计算结果为数字，否则解析成字符串。会报错！
+    引用的element-ui库默认是解析Number类型-->
+
+<script>
+    var arr = [a, b, c, d]
+
+    /**
+    2. v-for => v-key : index/id
+
+    * 删除数组里的b，index 会默认数据全部改变，建立DOM树结构，从而重新刷新页面渲染数据。
+    * 而id，数组里元素的每个id是唯一性的。因此v-key=id，只会影响b元素。并不会重新渲染。
+    * 
+    */
+
+
+    /**
+    3. Object.assign(target, ...sources)
+    
+    * 用于将多个对象的属性复制到一个对象中.
+    * @params.target[目标对象, sources和target对象属性进行合并, 复制结束之后, 将结果放到target对象中]
+    * @params.sources[需要复制属性的对象, 可以是多个]
+    * 如下面引用一段vue项目中的代码片段
+    */
+
+    getList: async function (page) { // 获取列表--当传入参数时代表从第一页开始调用
+        if (page) {
+            this.searchForm.page = 1
+        }
+        this.dateValue2 = this.dateValue
+        try {
+            // let date1 = this.searchForm.reportDate.split('_')
+            let data = await getSMSList(this.searchForm)
+            let {
+                header = [], list = [], totalPage = 1
+            } = data
+            Object.assign(this.$data, {
+                header,
+                list,
+                totalPage
+            })
+        } catch (e) {
+            this.$message.error(e.msg)
+        }
+    }
+</script>
